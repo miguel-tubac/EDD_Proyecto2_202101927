@@ -1,0 +1,3 @@
+221374732231, José Carlos, López Morales, Másculino, 54789832, 19 Av. 17-01 Z.6 Ciudad de Guatemala;
+342123984521, Gabriela, Pérez Sandoval, Femenino, 45621892, 20 Calle 19-78 Z.7 Ciudad de Guatemala;
+465321232212, Carlos Alejandro, Flores Gómez, Másculino, 54678976, 4ta Av. 12-08 Z.5 Ciudad de Guatemala;

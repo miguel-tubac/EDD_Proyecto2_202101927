@@ -2,11 +2,18 @@ import os
 from src.classes.Persona import Persona
 from src.DataStructs.ArbolB.ArbolB import ArbolB
 
+from src.classes.Cliente import Cliente
+from src.DataStructs.ListaCircularDoble.CircularDoble import CircularDoble
+
 from src.DataStructs.Grafo.ListaAdyacencia import ListaAdyacencia
 from src.classes.Vertice import Vertice
 
 import tkinter as tk
 from tkinter import Menu
+from tkinter import filedialog
+
+global circular_doble
+circular_doble = CircularDoble()
 
 
 def on_option_selected(option):
@@ -18,11 +25,11 @@ def create_menu(root):
     # Menú de Clientes
     clientes_menu = Menu(menu_bar, tearoff=0)
     clientes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Clientes -> Agregar"))
-    clientes_menu.add_command(label="Carga Masiva", command=lambda: on_option_selected("Clientes -> Carga Masiva"))
+    clientes_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo(circular_doble))
     clientes_menu.add_command(label="Modificar", command=lambda: on_option_selected("Clientes -> Modificar"))
     clientes_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Clientes -> Eliminar"))
     clientes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Clientes -> Mostrar Información"))
-    clientes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Clientes -> Mostrar Estructura de Datos"))
+    clientes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_CircularDoble())
     menu_bar.add_cascade(label="Clientes", menu=clientes_menu)
 
     # Menú de Vehículos
@@ -55,10 +62,43 @@ def create_menu(root):
     root.config(menu=menu_bar)
 
 
-def carga_masiva_cleintes(self):
-    pass
+
+def cargar_archivo(circular_doble:CircularDoble):
+    archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
+    if not archivo:
+        print("No se seleccionó ningún archivo.")
+        return
+
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            for linea in file:
+                linea = linea.strip()
+                if linea.endswith(";"):
+                    linea = linea[:-1]  # Eliminar el punto y coma final
+                    datos = linea.split(", ")
+                    if len(datos) == 6:
+                        cliente = Cliente(dpi=datos[0], nombres=datos[1], apellidos=datos[2], genero=datos[3], telefono=int(datos[4]), direccion=datos[5])
+                        circular_doble.agregar(cliente)
+        print("Carga masiva completada.")
+        circular_doble.ordenar_por_dpi()
+    except Exception as e:
+        print(f"Error al leer el archivo: {e}")
 
 
+def generar_Grafico_CircularDoble():
+    dot:str = circular_doble.generar_imagen()
+
+    # Guardar el texto en un archivo .dot
+    with open("Reportes/Clientes.dot", "w") as file:
+        file.write(dot)
+
+    # Generar la imagen usando Graphviz
+    os.system("dot -Tpng Reportes/Clientes.dot -o Reportes/Clientes.png")
+
+    # Abrir la imagen generada con el programa predeterminado en Windows
+    os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Clientes.png")
+    
+    
 
 
 def main() -> None:
