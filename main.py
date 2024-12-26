@@ -5,14 +5,77 @@ from src.DataStructs.ArbolB.ArbolB import ArbolB
 from src.DataStructs.Grafo.ListaAdyacencia import ListaAdyacencia
 from src.classes.Vertice import Vertice
 
+import tkinter as tk
+from tkinter import Menu
+
+
+def on_option_selected(option):
+    print(f"Seleccionaste la opción: {option}")
+
+def create_menu(root):
+    menu_bar = Menu(root)
+
+    # Menú de Clientes
+    clientes_menu = Menu(menu_bar, tearoff=0)
+    clientes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Clientes -> Agregar"))
+    clientes_menu.add_command(label="Carga Masiva", command=lambda: on_option_selected("Clientes -> Carga Masiva"))
+    clientes_menu.add_command(label="Modificar", command=lambda: on_option_selected("Clientes -> Modificar"))
+    clientes_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Clientes -> Eliminar"))
+    clientes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Clientes -> Mostrar Información"))
+    clientes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Clientes -> Mostrar Estructura de Datos"))
+    menu_bar.add_cascade(label="Clientes", menu=clientes_menu)
+
+    # Menú de Vehículos
+    vehiculos_menu = Menu(menu_bar, tearoff=0)
+    vehiculos_menu.add_command(label="Agregar", command=lambda: on_option_selected("Vehículos -> Agregar"))
+    vehiculos_menu.add_command(label="Modificar", command=lambda: on_option_selected("Vehículos -> Modificar"))
+    vehiculos_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Vehículos -> Eliminar"))
+    vehiculos_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Vehículos -> Mostrar Información"))
+    vehiculos_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Vehículos -> Mostrar Estructura de Datos"))
+    menu_bar.add_cascade(label="Vehículos", menu=vehiculos_menu)
+
+    # Menú de Viajes
+    viajes_menu = Menu(menu_bar, tearoff=0)
+    viajes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Viajes -> Agregar"))
+    viajes_menu.add_command(label="Modificar", command=lambda: on_option_selected("Viajes -> Modificar"))
+    viajes_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Viajes -> Eliminar"))
+    viajes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Viajes -> Mostrar Información"))
+    viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Viajes -> Mostrar Estructura de Datos"))
+    menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
+
+    # Menú de Rutas
+    rutas_menu = Menu(menu_bar, tearoff=0)
+    rutas_menu.add_command(label="Agregar", command=lambda: on_option_selected("Rutas -> Agregar"))
+    rutas_menu.add_command(label="Modificar", command=lambda: on_option_selected("Rutas -> Modificar"))
+    rutas_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Rutas -> Eliminar"))
+    rutas_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Rutas -> Mostrar Información"))
+    rutas_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Rutas -> Mostrar Estructura de Datos"))
+    menu_bar.add_cascade(label="Rutas", menu=rutas_menu)
+
+    root.config(menu=menu_bar)
+
+
+def carga_masiva_cleintes(self):
+    pass
+
+
+
 
 def main() -> None:
-    
-    
-    
+
+    root = tk.Tk()
+    root.title("Interfaz de Gestión")
+    root.geometry("900x600")
+
+    create_menu(root)
+
+    root.mainloop()
+
+
+
+
     '''
     #Esta parte corresponde al arbol B:
-    
     nuevaPersona = Persona("Miguel", 25)
     #print(f"Nombre:  {nuevaPersona.get_nombre()}")
     #print(f"Edad: {nuevaPersona.get_edad()}")
@@ -41,6 +104,11 @@ def main() -> None:
     #os.system("dot -Tpng Reportes/arbol_b.dot -o Reportes/arbol_b.png")'''
 
 
+
+
+
+
+    '''
     #Esta parte corresponde a la parte de los grafos
     lista_adyacencia:ListaAdyacencia = ListaAdyacencia()
 
@@ -49,7 +117,7 @@ def main() -> None:
     lista_adyacencia.insertar(Vertice(1), Vertice(4))
     lista_adyacencia.insertar(Vertice(2), Vertice(1))
     lista_adyacencia.insertar(Vertice(3), Vertice(2))
-    lista_adyacencia.insertar(Vertice(4), Vertice(2))
+    lista_adyacencia.insertar(Vertice(4), Vertice(2))'''
 
 if __name__ == '__main__':
     main()
