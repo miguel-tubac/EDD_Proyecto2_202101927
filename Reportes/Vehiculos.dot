@@ -1,0 +1,39 @@
+digraph G {
+	fontcolor=white;
+	nodesep=0.5;
+	splines=false
+	node [shape=record width=1.2 style=filled fillcolor="#313638"fontcolor=white color=transparent]; 
+	edge [fontcolor=white color="#0070C9"];
+	n0 [label="<f0>|444ASD |<f1>|678PLO|<f2>"];
+	n0:f0 -> n1;
+	n1 [label="<f0>|123BNV |<f1>|222BNM |<f2>|234ZXC |<f3>|345RTX|<f4>"];
+	n1:f0 -> n2;
+	n2 [label="<f0>|111QWE |<f1>|123ASD|<f2>"];
+	n1:f1 -> n3;
+	n3 [label="<f0>|123LKJ |<f1>|123POL |<f2>|123QAZ|<f3>"];
+	n1:f2 -> n4;
+	n4 [label="<f0>|234DFH |<f1>|234FGH |<f2>|234LOK|<f3>"];
+	n1:f3 -> n5;
+	n5 [label="<f0>|321PLK |<f1>|333XCV |<f2>|345DSA|<f3>"];
+	n1:f4 -> n6;
+	n6 [label="<f0>|345RTY |<f1>|345TYU |<f2>|432TRE|<f3>"];
+	n0:f1 -> n7;
+	n7 [label="<f0>|456WSX |<f1>|654CRV|<f2>"];
+	n7:f0 -> n8;
+	n8 [label="<f0>|456HJK |<f1>|456UJK |<f2>|456WER|<f3>"];
+	n7:f1 -> n9;
+	n9 [label="<f0>|555DFG |<f1>|567GHJ |<f2>|567HJK |<f3>|567IOL|<f4>"];
+	n7:f2 -> n10;
+	n10 [label="<f0>|666RTY |<f1>|678KJL|<f2>"];
+	n0:f2 -> n11;
+	n11 [label="<f0>|789GHY |<f1>|888OPA |<f2>|901QWE|<f3>"];
+	n11:f0 -> n12;
+	n12 [label="<f0>|678QWE |<f1>|777UIO |<f2>|789DFG |<f3>|789EDC|<f4>"];
+	n11:f1 -> n13;
+	n13 [label="<f0>|789LKJ |<f1>|789UIK |<f2>|876GDW|<f3>"];
+	n11:f2 -> n14;
+	n14 [label="<f0>|890IUY |<f1>|890OLP |<f2>|890TYR |<f3>|901GHJ|<f4>"];
+	n11:f3 -> n15;
+	n15 [label="<f0>|901TYU |<f1>|987JYU |<f2>|999ZXC|<f3>"];
+	
+}

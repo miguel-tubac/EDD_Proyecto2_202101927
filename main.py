@@ -3,6 +3,7 @@ from src.classes.Persona import Persona
 from src.DataStructs.ArbolB.ArbolB import ArbolB
 
 from src.classes.Cliente import Cliente
+from src.classes.Vehiculo import Vehiculo
 from src.DataStructs.ListaCircularDoble.CircularDoble import CircularDoble
 
 from src.DataStructs.Grafo.ListaAdyacencia import ListaAdyacencia
@@ -17,6 +18,8 @@ from tkinter import messagebox
 global circular_doble
 circular_doble = CircularDoble()
 
+global arbolb_general
+arbolb_general: ArbolB = ArbolB(5)#Este es el valor de orden
 
 
 #--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
@@ -39,10 +42,11 @@ def create_menu(root):
     # Menú de Vehículos
     vehiculos_menu = Menu(menu_bar, tearoff=0)
     vehiculos_menu.add_command(label="Agregar", command=lambda: on_option_selected("Vehículos -> Agregar"))
+    vehiculos_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_vehiculos())
     vehiculos_menu.add_command(label="Modificar", command=lambda: on_option_selected("Vehículos -> Modificar"))
     vehiculos_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Vehículos -> Eliminar"))
     vehiculos_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Vehículos -> Mostrar Información"))
-    vehiculos_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Vehículos -> Mostrar Estructura de Datos"))
+    vehiculos_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_Arbolb())
     menu_bar.add_cascade(label="Vehículos", menu=vehiculos_menu)
 
     # Menú de Viajes
@@ -83,7 +87,7 @@ def cargar_archivo(circular_doble:CircularDoble):
                 linea = linea.strip()
                 if linea.endswith(";"):
                     linea = linea[:-1]  # Eliminar el punto y coma final
-                    datos = linea.split(", ")
+                    datos = linea.split(",")
                     if len(datos) == 6:
                         cliente = Cliente(dpi=datos[0], nombres=datos[1], apellidos=datos[2], genero=datos[3], telefono=int(datos[4]), direccion=datos[5])
                         circular_doble.agregar(cliente)
@@ -257,6 +261,59 @@ def mostrar_informacion_cliente():
 
 
 
+
+
+#--------------------------------------------------------------Esta es la parte de los Vehiculos---------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+def cargar_archivo_vehiculos():
+    archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
+    if not archivo:
+        print("No se seleccionó ningún archivo.")
+        messagebox.showinfo("Información", "No se seleccionó ningún archivo")
+        return
+
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            for linea in file:
+                linea = linea.strip()
+                if linea.endswith(";"):
+                    linea = linea[:-1]  # Eliminar el punto y coma final
+                    datos = linea.split(":")
+                    if len(datos) == 4:
+                        vehiculo = Vehiculo(placa=datos[0], marca=datos[1], modelo=int(datos[2]), precio=float(datos[3]))
+                        arbolb_general.insertar_valor(vehiculo)
+        print("Carga masiva completada.")
+        messagebox.showinfo("Información", "Carga masiva completada")
+    except Exception as e:
+        print(f"Error al leer el archivo: {e}")
+
+
+
+def generar_Grafico_Arbolb():
+    dot:str = arbolb_general.imprimir_usuario()
+
+    # Guardar el texto en un archivo .dot
+    with open("Reportes/Vehiculos.dot", "w") as file:
+        file.write(dot)
+
+    # Generar la imagen usando Graphviz
+    os.system("dot -Tpng Reportes/Vehiculos.dot -o Reportes/Vehiculos.png")
+
+    # Abrir la imagen generada con el programa predeterminado en Windows
+    os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Vehiculos.png")
+
+
+
+#----------------------------------------------------------------------Fin de los Vehiculos-------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 def main() -> None:
 
     root = tk.Tk()
@@ -266,40 +323,6 @@ def main() -> None:
     create_menu(root)
 
     root.mainloop()
-
-
-
-
-    '''
-    #Esta parte corresponde al arbol B:
-    nuevaPersona = Persona("Miguel", 25)
-    #print(f"Nombre:  {nuevaPersona.get_nombre()}")
-    #print(f"Edad: {nuevaPersona.get_edad()}")
-    print(nuevaPersona)# Aca no me imprimira la direccion de memoria sino que el metodo __str__ de la clase persona
-
-    nuevoArbol: ArbolB = ArbolB(5)#Este es el valor de orden
-    nuevoArbol.insertar_valor(5)
-    nuevoArbol.insertar_valor(6)
-    nuevoArbol.insertar_valor(4)
-    nuevoArbol.insertar_valor(2)
-    nuevoArbol.insertar_valor(7)
-    nuevoArbol.insertar_valor(9)
-    nuevoArbol.insertar_valor(10)
-    nuevoArbol.insertar_valor(3)
-    nuevoArbol.insertar_valor(1)
-    nuevoArbol.insertar_valor(12)
-    nuevoArbol.insertar_valor(0)
-
-    nuevoArbol.insertar_valor(-1)
-    nuevoArbol.insertar_valor(13)
-    nuevoArbol.insertar_valor(20)
-    nuevoArbol.insertar_valor(23)
-
-    print(nuevoArbol.imprimir_usuario())
-
-    #os.system("dot -Tpng Reportes/arbol_b.dot -o Reportes/arbol_b.png")'''
-
-
 
 
 
