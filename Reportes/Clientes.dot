@@ -1,11 +1,11 @@
 digraph G {
-    221374732231 [label="DPI: 221374732231\nJosé Carlos López Morales \nGenero: Másculino\nTelefono: 54789832\nDireccion: 19 Av. 17-01 Z.6 Ciudad de Guatemala"];
-    221374732231 -> 342123984521;
-    221374732231 -> 465321232212 [constraint=false];
+    3061 [label="DPI: 3061\nMIguel Adrian  Tubac Agustin \nGenero: Masculino\nTelefono: 51321061\nDireccion: Ciudad"];
+    3061 -> 342123984521;
+    3061 -> 465321232212 [constraint=false];
     342123984521 [label="DPI: 342123984521\nGabriela Pérez Sandoval \nGenero: Femenino\nTelefono: 45621892\nDireccion: 20 Calle 19-78 Z.7 Ciudad de Guatemala"];
     342123984521 -> 465321232212;
-    342123984521 -> 221374732231 [constraint=false];
+    342123984521 -> 3061 [constraint=false];
     465321232212 [label="DPI: 465321232212\nCarlos Alejandro Flores Gómez \nGenero: Másculino\nTelefono: 54678976\nDireccion: 4ta Av. 12-08 Z.5 Ciudad de Guatemala"];
-    465321232212 -> 221374732231;
+    465321232212 -> 3061;
     465321232212 -> 342123984521 [constraint=false];
 }

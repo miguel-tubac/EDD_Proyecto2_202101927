@@ -1,4 +1,5 @@
 from src.DataStructs.ListaCircularDoble.Nodo import Nodo
+from src.classes.Cliente import Cliente
 
 class CircularDoble:
     def __init__(self):
@@ -26,7 +27,7 @@ class CircularDoble:
 
         actual = self.primero
         while True:
-            if actual.cliente.dpi == dpi:
+            if actual.Cliente.dpi == dpi:
                 if actual.siguiente == actual:  # Solo un elemento en la lista
                     self.primero = None
                 else:
@@ -83,6 +84,24 @@ class CircularDoble:
             actual = actual.siguiente
             if actual == self.primero:
                 break
+
+
+    def buscar(self, dpi:str) -> Cliente:
+        if self.esta_vacia():
+            print("La lista está vacía.")
+            return None
+
+        actual = self.primero
+        while True:
+            cliente = actual.Cliente
+            if cliente.dpi == dpi:
+                return cliente
+            actual = actual.siguiente
+            if actual == self.primero:
+                break
+        
+        print(f"El cliente con el numero de DPI: {dpi} no se encontro en el sistema.")
+        return None
 
 
     def generar_imagen(self) -> str:

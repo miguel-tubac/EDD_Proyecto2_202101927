@@ -11,11 +11,15 @@ from src.classes.Vertice import Vertice
 import tkinter as tk
 from tkinter import Menu
 from tkinter import filedialog
+from tkinter import simpledialog
+from tkinter import messagebox
 
 global circular_doble
 circular_doble = CircularDoble()
 
 
+
+#--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
 def on_option_selected(option):
     print(f"Seleccionaste la opción: {option}")
 
@@ -24,11 +28,11 @@ def create_menu(root):
 
     # Menú de Clientes
     clientes_menu = Menu(menu_bar, tearoff=0)
-    clientes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Clientes -> Agregar"))
+    clientes_menu.add_command(label="Agregar", command=lambda: cargar_cliente())
     clientes_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo(circular_doble))
-    clientes_menu.add_command(label="Modificar", command=lambda: on_option_selected("Clientes -> Modificar"))
-    clientes_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Clientes -> Eliminar"))
-    clientes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Clientes -> Mostrar Información"))
+    clientes_menu.add_command(label="Modificar", command=lambda: modificar_cliente())
+    clientes_menu.add_command(label="Eliminar", command=lambda: eliminar_cliente())
+    clientes_menu.add_command(label="Mostrar Información", command=lambda: mostrar_informacion_cliente())
     clientes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_CircularDoble())
     menu_bar.add_cascade(label="Clientes", menu=clientes_menu)
 
@@ -60,13 +64,17 @@ def create_menu(root):
     menu_bar.add_cascade(label="Rutas", menu=rutas_menu)
 
     root.config(menu=menu_bar)
+#--------------------------------------------------------Fin Menu Principal-----------------------------------------------------------------------------------
 
 
 
+#--------------------------------------------------------------Esta es la parte de los CLientes---------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
 def cargar_archivo(circular_doble:CircularDoble):
     archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
     if not archivo:
         print("No se seleccionó ningún archivo.")
+        messagebox.showinfo("Información", "No se seleccionó ningún archivo")
         return
 
     try:
@@ -80,6 +88,7 @@ def cargar_archivo(circular_doble:CircularDoble):
                         cliente = Cliente(dpi=datos[0], nombres=datos[1], apellidos=datos[2], genero=datos[3], telefono=int(datos[4]), direccion=datos[5])
                         circular_doble.agregar(cliente)
         print("Carga masiva completada.")
+        messagebox.showinfo("Información", "Carga masiva completada")
         circular_doble.ordenar_por_dpi()
     except Exception as e:
         print(f"Error al leer el archivo: {e}")
@@ -98,7 +107,154 @@ def generar_Grafico_CircularDoble():
     # Abrir la imagen generada con el programa predeterminado en Windows
     os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Clientes.png")
     
-    
+
+def cargar_cliente():
+    # Crear ventana emergente
+    ventana = tk.Toplevel()
+    ventana.title("Ingreso de Cliente")
+    ventana.geometry("400x300")
+
+    # Variables para almacenar los datos
+    dpi_var = tk.StringVar()
+    nombres_var = tk.StringVar()
+    apellidos_var = tk.StringVar()
+    genero_var = tk.StringVar()
+    telefono_var = tk.StringVar()
+    direccion_var = tk.StringVar()
+
+    # Etiquetas y entradas para cada campo
+    tk.Label(ventana, text="DPI:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=dpi_var).grid(row=0, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Nombres:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=nombres_var).grid(row=1, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Apellidos:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=apellidos_var).grid(row=2, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Género:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=genero_var).grid(row=3, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Teléfono:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=telefono_var).grid(row=4, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Dirección:").grid(row=5, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=direccion_var).grid(row=5, column=1, padx=10, pady=5)
+
+    def guardar_datos(): 
+        cliente = Cliente(dpi=dpi_var.get(), nombres=nombres_var.get(), apellidos=apellidos_var.get(), genero=genero_var.get(), telefono=int(telefono_var.get()), direccion=direccion_var.get())
+        circular_doble.agregar(cliente)
+        print("¡¡¡ Cliente ingresado Correctamente !!!") 
+        circular_doble.ordenar_por_dpi() # Se ordena despues de ingresar a un nuevo cliente
+        ventana.destroy()
+        messagebox.showinfo("Información", "¡¡¡ Cliente ingresado Correctamente !!!")
+
+    # Botón para guardar datos
+    tk.Button(ventana, text="Guardar", command=guardar_datos).grid(row=6, column=0, columnspan=2, pady=10)
+
+    # Hacer modal la ventana
+    ventana.transient()  # Hacer que sea hija de la ventana principal
+    ventana.grab_set()  # Bloquear interacción con la ventana principal hasta que esta se cierre
+    ventana.mainloop()
+
+
+def modificar_cliente():
+    # Mostrar el cuadro de diálogo para ingresar DPI
+    dpi = simpledialog.askstring("Ingreso de DPI", "Ingrese el DPI del cliente:")
+    if dpi:
+        cliente = circular_doble.buscar(dpi=dpi)
+        
+        if cliente:
+            # Crear ventana emergente
+            ventana = tk.Toplevel()
+            ventana.title("Modificar Cliente")
+            ventana.geometry("400x300")
+
+            # Variables para almacenar los datos
+            dpi_var = tk.StringVar()
+            nombres_var = tk.StringVar()
+            apellidos_var = tk.StringVar()
+            genero_var = tk.StringVar()
+            telefono_var = tk.StringVar()
+            direccion_var = tk.StringVar()
+
+            # Asignar valores a las variables
+            dpi_var.set(cliente.get_dpi())
+            nombres_var.set(cliente.get_nombres())
+            apellidos_var.set(cliente.get_apellidos())
+            genero_var.set(cliente.get_genero())
+            telefono_var.set(str(cliente.get_telefono()))
+            direccion_var.set(cliente.get_direccion())
+
+            # Etiquetas y entradas para cada campo
+            tk.Label(ventana, text="DPI:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=dpi_var, state="readonly").grid(row=0, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Nombres:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=nombres_var).grid(row=1, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Apellidos:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=apellidos_var).grid(row=2, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Género:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=genero_var).grid(row=3, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Teléfono:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=telefono_var).grid(row=4, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Dirección:").grid(row=5, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=direccion_var).grid(row=5, column=1, padx=10, pady=5)
+
+            # Botón para guardar cambios
+            def guardar_cambios():
+                cliente.set_nombres(nombres_var.get())
+                cliente.set_apellidos(apellidos_var.get())
+                cliente.set_genero(genero_var.get())
+                cliente.set_telefono(int(telefono_var.get()))
+                cliente.set_direccion(direccion_var.get())
+                ventana.destroy()
+                messagebox.showinfo("Éxito", "Cliente actualizado correctamente.")
+
+            tk.Button(ventana, text="Guardar Cambios", command=guardar_cambios).grid(row=6, columnspan=2, pady=10)
+
+        else:
+            messagebox.showerror("Error", f"No se encontró un cliente con DPI: {dpi}")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+
+def eliminar_cliente():
+    dpi = simpledialog.askstring("Ingreso de DPI", "Ingrese el DPI del cliente:")
+    if dpi:
+        validacion:bool = circular_doble.eliminar(dpi=dpi)
+        if validacion:
+            messagebox.showinfo("Información", f"Se elimino al cliente con el DPI: {dpi}")
+        else:
+            messagebox.showinfo("Error", f"El DPI: {dpi} no existe o la Lista esta vacia.")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+def mostrar_informacion_cliente():
+    # Mostrar el cuadro de diálogo para ingresar DPI
+    dpi = simpledialog.askstring("Ingreso de DPI", "Ingrese el DPI del cliente:")
+    if dpi:
+        cliente = circular_doble.buscar(dpi=dpi)
+        if cliente:
+            mostrar:str = f"DPI: {cliente.get_dpi()}\n{cliente.get_nombres()} {cliente.get_apellidos()}\nGenero: {cliente.get_genero()}"
+            mostrar += f"\nTelefono: {str(cliente.get_telefono())}\nDireccion: {cliente.get_direccion()}"
+            messagebox.showinfo("Información", mostrar)
+
+        else:
+            messagebox.showerror("Error", f"No se encontró un cliente con DPI: {dpi}")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+#--------------------------------------------------------------Fin de los Clientes----------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 def main() -> None:
