@@ -58,20 +58,12 @@ def create_menu(root):
     # Menú de Viajes
     viajes_menu = Menu(menu_bar, tearoff=0)
     viajes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Viajes -> Agregar"))
-    viajes_menu.add_command(label="Modificar", command=lambda: on_option_selected("Viajes -> Modificar"))
-    viajes_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Viajes -> Eliminar"))
-    viajes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Viajes -> Mostrar Información"))
     viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Viajes -> Mostrar Estructura de Datos"))
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
 
     # Menú de Rutas
     rutas_menu = Menu(menu_bar, tearoff=0)
-    rutas_menu.add_command(label="Agregar", command=lambda: on_option_selected("Rutas -> Agregar"))
-    rutas_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_rutas())
-    rutas_menu.add_command(label="Modificar", command=lambda: on_option_selected("Rutas -> Modificar"))
-    rutas_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Rutas -> Eliminar"))
-    rutas_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Rutas -> Mostrar Información"))
-    rutas_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_ListaAdyacencia(root=root))
+    rutas_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_rutas(root=root))
     menu_bar.add_cascade(label="Rutas", menu=rutas_menu)
 
     root.config(menu=menu_bar)
@@ -448,7 +440,7 @@ def mostrar_informacion_vehiculo():
 
 #--------------------------------------------------------------Esta es la parte de las Rutas---------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
-def cargar_archivo_rutas():
+def cargar_archivo_rutas(root):
     archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
     if not archivo:
         print("No se seleccionó ningún archivo.")
@@ -466,7 +458,8 @@ def cargar_archivo_rutas():
                         ruta:Ruta = Ruta(origen=datos[0], destino=datos[1], tiempo=int(datos[2]))
                         lista_adyacencia_general.insertar(ruta=ruta)
         print("Carga masiva completada.")
-        messagebox.showinfo("Información", "Carga masiva completada")
+        #messagebox.showinfo("Información", "Carga masiva completada")
+        generar_Grafico_ListaAdyacencia(root=root)
     except Exception as e:
         print(f"Error al leer el archivo: {e}")
 
