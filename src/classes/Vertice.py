@@ -6,16 +6,19 @@ class Vertice:
         self.valor:str = valor
         self.vecinos:Lista[Vertice] = Lista()
         self.peso:int = peso
+        self.peso_acumulado:int = 0
+        self.visitado:bool = False
 
+    def get_peso_acumulado(self, peso)->int:
+        self.peso_acumulado += peso
+        return self.peso_acumulado
 
     def __str__(self) -> str:
         aux = self.vecinos.cabeza
 
         dot: str = ""
-
         while aux != None:
             dot += f'edge [label={aux.valor.peso} fontsize=5]; \n\t{self.valor} -> {aux.valor.valor}; \n\t'
-
             aux = aux.sig
 
         return dot
