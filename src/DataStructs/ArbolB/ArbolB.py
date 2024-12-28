@@ -56,6 +56,42 @@ class ArbolB:
             nodo.hijos = hijo.hijos[posicion_media + 1:posicion_media*2 + 2]
             hijo.hijos = hijo.hijos[0:posicion_media +1]
 
+
+
+    def buscar(self, placa: str) -> Vehiculo:
+        """
+        Busca un vehículo en el árbol B basado en la placa.
+        :param placa: Placa del vehículo a buscar.
+        :return: El objeto Vehículo si se encuentra, de lo contrario None.
+        """
+        return self._buscar_en_nodo(self.raiz, placa)
+
+    def _buscar_en_nodo(self, nodo: NodoArbolB, placa: str) -> Vehiculo:
+        """
+        Función recursiva para buscar en un nodo del árbol B.
+        :param nodo: Nodo actual donde buscar.
+        :param placa: Placa del vehículo a buscar.
+        :return: El objeto Vehículo si se encuentra, de lo contrario None.
+        """
+        # Buscar la posición dentro del nodo actual
+        i = 0
+        while i < len(nodo.claves) and placa > nodo.claves[i].get_placa():
+            i += 1
+
+        # Si la clave actual coincide con la placa, devuelve el vehículo
+        if i < len(nodo.claves) and placa == nodo.claves[i].get_placa():
+            return nodo.claves[i]
+
+        # Si el nodo es hoja, el vehículo no está en el árbol
+        if nodo.hoja:
+            return None
+
+        # Si no es hoja, buscar en el hijo correspondiente
+        return self._buscar_en_nodo(nodo.hijos[i], placa)
+
+
+
+
     
     def imprimir_usuario(self) ->str:
         dot: str = 'digraph G {\n\t';

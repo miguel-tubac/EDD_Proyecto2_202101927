@@ -41,9 +41,9 @@ def create_menu(root):
 
     # Menú de Vehículos
     vehiculos_menu = Menu(menu_bar, tearoff=0)
-    vehiculos_menu.add_command(label="Agregar", command=lambda: on_option_selected("Vehículos -> Agregar"))
+    vehiculos_menu.add_command(label="Agregar", command=lambda: cargar_vehiculo())
     vehiculos_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_vehiculos())
-    vehiculos_menu.add_command(label="Modificar", command=lambda: on_option_selected("Vehículos -> Modificar"))
+    vehiculos_menu.add_command(label="Modificar", command=lambda: modificar_vehiculo())
     vehiculos_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Vehículos -> Eliminar"))
     vehiculos_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Vehículos -> Mostrar Información"))
     vehiculos_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_Arbolb())
@@ -116,7 +116,7 @@ def cargar_cliente():
     # Crear ventana emergente
     ventana = tk.Toplevel()
     ventana.title("Ingreso de Cliente")
-    ventana.geometry("400x300")
+    ventana.geometry("250x250") #largo x ancho
 
     # Variables para almacenar los datos
     dpi_var = tk.StringVar()
@@ -172,7 +172,7 @@ def modificar_cliente():
             # Crear ventana emergente
             ventana = tk.Toplevel()
             ventana.title("Modificar Cliente")
-            ventana.geometry("400x300")
+            ventana.geometry("250x250")
 
             # Variables para almacenar los datos
             dpi_var = tk.StringVar()
@@ -302,6 +302,106 @@ def generar_Grafico_Arbolb():
     # Abrir la imagen generada con el programa predeterminado en Windows
     os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Vehiculos.png")
 
+
+
+
+def cargar_vehiculo():
+    # Crear ventana emergente
+    ventana = tk.Toplevel()
+    ventana.title("Ingreso de Vehículo")
+    ventana.geometry("300x200") #largo x ancho
+
+    # Variables para almacenar los datos
+    placa_var = tk.StringVar()
+    marca_var = tk.StringVar()
+    modelo_var = tk.StringVar()
+    precio_var = tk.StringVar()
+
+    # Etiquetas y entradas para cada campo
+    tk.Label(ventana, text="Placa:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=placa_var).grid(row=0, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Marca:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=marca_var).grid(row=1, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Modelo:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=modelo_var).grid(row=2, column=1, padx=10, pady=5)
+
+    tk.Label(ventana, text="Precio (Q):").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=precio_var).grid(row=3, column=1, padx=10, pady=5)
+
+
+    def guardar_datos(): 
+        vehiculo = Vehiculo(placa=placa_var.get(), marca=marca_var.get(),modelo=int(modelo_var.get()),precio=float(precio_var.get()))
+        arbolb_general.insertar_valor(vehiculo)
+        print("¡¡¡ Vehículo ingresado Correctamente !!!") 
+        ventana.destroy()
+        messagebox.showinfo("Información", "¡¡¡ Vehículo ingresado Correctamente !!!")
+
+    # Botón para guardar datos
+    tk.Button(ventana, text="Guardar", command=guardar_datos).grid(row=6, column=0, columnspan=2, pady=10)
+
+    # Hacer modal la ventana
+    ventana.transient()  # Hacer que sea hija de la ventana principal
+    ventana.grab_set()  # Bloquear interacción con la ventana principal hasta que esta se cierre
+    ventana.mainloop()
+
+
+
+
+def modificar_vehiculo():
+    # Mostrar el cuadro de diálogo para ingresar DPI
+    placa = simpledialog.askstring("Ingreso la Placa", "Ingrese la Placa del Vehículo:")
+    if placa:
+        vhiculo:Vehiculo = arbolb_general.buscar(placa=placa)
+
+        if vhiculo:
+            # Crear ventana emergente
+            ventana = tk.Toplevel()
+            ventana.title("Modificar Vehículo")
+            ventana.geometry("300x200")
+
+            # Variables para almacenar los datos
+            placa_var = tk.StringVar()
+            marca_var = tk.StringVar()
+            modelo_var = tk.StringVar()
+            precio_var = tk.StringVar()
+
+            # Asignar valores a las variables
+            placa_var.set(vhiculo.get_placa())
+            marca_var.set(vhiculo.get_marca())
+            modelo_var.set(str(vhiculo.get_modelo()))
+            precio_var.set(str(vhiculo.get_precio()))
+            
+
+            # Etiquetas y entradas para cada campo
+            tk.Label(ventana, text="Placa:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=placa_var, state="readonly").grid(row=0, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Marca:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=marca_var).grid(row=1, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Modelo:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=modelo_var).grid(row=2, column=1, padx=10, pady=5)
+
+            tk.Label(ventana, text="Precio:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+            tk.Entry(ventana, textvariable=precio_var).grid(row=3, column=1, padx=10, pady=5)
+
+            # Botón para guardar cambios
+            def guardar_cambios():
+                vhiculo.set_placa(placa_var.get())
+                vhiculo.set_marca(marca_var.get())
+                vhiculo.set_modelo(int(modelo_var.get()))
+                vhiculo.set_precio(float(precio_var.get()))
+                ventana.destroy()
+                messagebox.showinfo("Éxito", "Vehículo actualizado correctamente.")
+
+            tk.Button(ventana, text="Guardar Cambios", command=guardar_cambios).grid(row=6, columnspan=2, pady=10)
+
+        else:
+            messagebox.showerror("Error", f"No se encontró un Vehículo con Placa: {placa}")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
 
 
 #----------------------------------------------------------------------Fin de los Vehiculos-------------------------------------------------------------------
