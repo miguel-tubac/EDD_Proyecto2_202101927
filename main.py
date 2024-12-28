@@ -44,8 +44,8 @@ def create_menu(root):
     vehiculos_menu.add_command(label="Agregar", command=lambda: cargar_vehiculo())
     vehiculos_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_vehiculos())
     vehiculos_menu.add_command(label="Modificar", command=lambda: modificar_vehiculo())
-    vehiculos_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Vehículos -> Eliminar"))
-    vehiculos_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Vehículos -> Mostrar Información"))
+    vehiculos_menu.add_command(label="Eliminar", command=lambda: eliminar_vehiculo())
+    vehiculos_menu.add_command(label="Mostrar Información", command=lambda: mostrar_informacion_vehiculo())
     vehiculos_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_Arbolb())
     menu_bar.add_cascade(label="Vehículos", menu=vehiculos_menu)
 
@@ -400,6 +400,34 @@ def modificar_vehiculo():
 
         else:
             messagebox.showerror("Error", f"No se encontró un Vehículo con Placa: {placa}")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+
+def eliminar_vehiculo():
+    placa = simpledialog.askstring("Ingreso la Placa", "Ingrese la Placa del Vehículo:")
+    if placa:
+        validacion:bool = arbolb_general.eliminar(placa=placa)
+        if validacion:
+            messagebox.showinfo("Información", f"Se elimino al Vehículo con la Placa: {placa}")
+        else:
+            messagebox.showinfo("Error", f"La placa: {placa} no existe o el Arbol esta vacio.")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+
+def mostrar_informacion_vehiculo():
+    placa = simpledialog.askstring("Ingreso la Placa", "Ingrese la Placa del Vehículo:")
+    if placa:
+        vehiculo:Vehiculo = arbolb_general.buscar(placa=placa)
+        if vehiculo:
+            mostrar:str = f"Placa: {vehiculo.get_placa()}\nMarca: {vehiculo.get_marca()}\nModelo: {str(vehiculo.get_modelo())}"
+            mostrar += f"\nPrecio (Q.): {str(vehiculo.get_precio())}"
+            messagebox.showinfo("Información", mostrar)
+        else:
+            messagebox.showinfo("Error", f"La placa: {placa} no existe o el Arbol esta vacio.")
     else:
         messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
 
