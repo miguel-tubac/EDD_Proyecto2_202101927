@@ -1,0 +1,18 @@
+digraph G {
+	edge [arrowhead=none fontcolor=black color="#ff5400"];
+	node [shape=circle fixedsize=shape width=0.5 fontsize=7 style=filled fillcolor="#313638" fontcolor=white color=transparent];
+	edge [label=304 fontsize=5]; 
+	Oviedo  ->  Bilbao ; 
+	edge [label=324 fontsize=5]; 
+	Bilbao  ->  Zaragoza ; 
+	edge [label=395 fontsize=5]; 
+	Bilbao  ->  Madrid ; 
+	edge [label=280 fontsize=5]; 
+	Bilbao  ->  Valladolid ; 
+	edge [label=296 fontsize=5]; 
+	Zaragoza  ->  Barcelona ; 
+	edge [label=325 fontsize=5]; 
+	Zaragoza  ->  Madrid ; 
+	edge [label=100 fontsize=5]; 
+	Barcelona  ->  Gerona ; 
+	}

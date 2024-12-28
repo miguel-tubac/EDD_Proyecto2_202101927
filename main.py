@@ -8,18 +8,24 @@ from src.DataStructs.ListaCircularDoble.CircularDoble import CircularDoble
 
 from src.DataStructs.Grafo.ListaAdyacencia import ListaAdyacencia
 from src.classes.Vertice import Vertice
+from src.classes.Ruta import Ruta
 
 import tkinter as tk
-from tkinter import Menu
+from tkinter import Tk, Label, Menu
 from tkinter import filedialog
 from tkinter import simpledialog
 from tkinter import messagebox
+
+from PIL import Image, ImageTk
 
 global circular_doble
 circular_doble = CircularDoble()
 
 global arbolb_general
 arbolb_general: ArbolB = ArbolB(5)#Este es el valor de orden
+
+global lista_adyacencia_general
+lista_adyacencia_general:ListaAdyacencia = ListaAdyacencia()
 
 
 #--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
@@ -61,10 +67,11 @@ def create_menu(root):
     # Menú de Rutas
     rutas_menu = Menu(menu_bar, tearoff=0)
     rutas_menu.add_command(label="Agregar", command=lambda: on_option_selected("Rutas -> Agregar"))
+    rutas_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_rutas())
     rutas_menu.add_command(label="Modificar", command=lambda: on_option_selected("Rutas -> Modificar"))
     rutas_menu.add_command(label="Eliminar", command=lambda: on_option_selected("Rutas -> Eliminar"))
     rutas_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Rutas -> Mostrar Información"))
-    rutas_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Rutas -> Mostrar Estructura de Datos"))
+    rutas_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_ListaAdyacencia(root=root))
     menu_bar.add_cascade(label="Rutas", menu=rutas_menu)
 
     root.config(menu=menu_bar)
@@ -106,7 +113,7 @@ def generar_Grafico_CircularDoble():
         file.write(dot)
 
     # Generar la imagen usando Graphviz
-    os.system("dot -Tpng Reportes/Clientes.dot -o Reportes/Clientes.png")
+    os.system("dot -Tpng -Gdpi=300 Reportes/Clientes.dot -o Reportes/Clientes.png")
 
     # Abrir la imagen generada con el programa predeterminado en Windows
     os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Clientes.png")
@@ -264,7 +271,7 @@ def mostrar_informacion_cliente():
 
 
 #--------------------------------------------------------------Esta es la parte de los Vehiculos---------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------
 def cargar_archivo_vehiculos():
     archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
     if not archivo:
@@ -297,7 +304,7 @@ def generar_Grafico_Arbolb():
         file.write(dot)
 
     # Generar la imagen usando Graphviz
-    os.system("dot -Tpng Reportes/Vehiculos.dot -o Reportes/Vehiculos.png")
+    os.system("dot -Tpng -Gdpi=300 Reportes/Vehiculos.dot -o Reportes/Vehiculos.png")
 
     # Abrir la imagen generada con el programa predeterminado en Windows
     os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Vehiculos.png")
@@ -439,6 +446,95 @@ def mostrar_informacion_vehiculo():
 
 
 
+#--------------------------------------------------------------Esta es la parte de las Rutas---------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+def cargar_archivo_rutas():
+    archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=(("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")))
+    if not archivo:
+        print("No se seleccionó ningún archivo.")
+        messagebox.showinfo("Información", "No se seleccionó ningún archivo")
+        return
+
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            for linea in file:
+                linea = linea.strip()
+                if linea.endswith("%"):
+                    linea = linea[:-1]  # Eliminar el punto y coma final
+                    datos = linea.split("/")
+                    if len(datos) == 3:
+                        ruta:Ruta = Ruta(origen=datos[0], destino=datos[1], tiempo=int(datos[2]))
+                        lista_adyacencia_general.insertar(ruta=ruta)
+        print("Carga masiva completada.")
+        messagebox.showinfo("Información", "Carga masiva completada")
+    except Exception as e:
+        print(f"Error al leer el archivo: {e}")
+
+
+
+
+def generar_Grafico_ListaAdyacencia(root):
+    try:
+        # Generar el texto en formato DOT
+        dot: str = lista_adyacencia_general.imprimir()
+
+        # Guardar el texto en un archivo .dot
+        with open("Reportes/Rutas.dot", "w") as file:
+            file.write(dot)
+
+        # Generar la imagen usando Graphviz
+        resultado = os.system("neato -Tpng -Gdpi=300 Reportes/Rutas.dot -o Reportes/Rutas.png")
+
+        # Verificar si el comando se ejecutó correctamente
+        if resultado != 0:
+            raise RuntimeError("Error al generar la imagen con Graphviz")
+        else:
+            # Actualizar imagen al cambiar tamaño de ventana
+            root.update_idletasks()
+            colocar_imagen_VentanaPrincipal(root)
+            # Actualizar imagen al redimensionar
+            root.bind("<Configure>", lambda event: colocar_imagen_VentanaPrincipal(root))
+            messagebox.showinfo("Información", "¡¡¡ Mapa General creado con Exito !!!")
+    except Exception as e:
+        print(f"Error al generar el gráfico de la lista de adyacencia: {e}")
+
+    #os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Rutas.png")
+
+
+
+
+#---------------------------------------------------------------------------Fin de las Rutas---------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+def colocar_imagen_VentanaPrincipal(root):
+    # Obtener tamaño actual de la ventana
+    ancho = root.winfo_width()
+    alto = root.winfo_height()
+
+    # Cargar y redimensionar la imagen
+    ruta_imagen = "C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Rutas.png"
+    try:
+        image = Image.open(ruta_imagen)
+        image = image.resize((ancho, alto), Image.Resampling.LANCZOS)
+        image_tk = ImageTk.PhotoImage(image)
+
+        # Crear o actualizar Label
+        if hasattr(root, "image_label") and root.image_label is not None:
+            root.image_label.config(image=image_tk)
+            root.image_label.image = image_tk  # Actualizar referencia
+        else:
+            root.image_label = Label(root, image=image_tk)
+            root.image_label.image = image_tk
+            root.image_label.place(x=0, y=0, relwidth=1, relheight=1)
+    except Exception as e:
+        print(f"Error al cargar la imagen: {e}")
+
+
 
 
 
@@ -448,23 +544,15 @@ def main() -> None:
     root.title("Interfaz de Gestión")
     root.geometry("900x600")
 
+    # Maximizar la ventana
+    root.state("zoomed")  # Maximiza la ventana en Windows y Linux
+
     create_menu(root)
+
 
     root.mainloop()
 
 
-
-
-    '''
-    #Esta parte corresponde a la parte de los grafos
-    lista_adyacencia:ListaAdyacencia = ListaAdyacencia()
-
-    lista_adyacencia.insertar(Vertice(1), Vertice(2))
-    lista_adyacencia.insertar(Vertice(1), Vertice(3))
-    lista_adyacencia.insertar(Vertice(1), Vertice(4))
-    lista_adyacencia.insertar(Vertice(2), Vertice(1))
-    lista_adyacencia.insertar(Vertice(3), Vertice(2))
-    lista_adyacencia.insertar(Vertice(4), Vertice(2))'''
 
 if __name__ == '__main__':
     main()
