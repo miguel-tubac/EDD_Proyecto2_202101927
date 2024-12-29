@@ -21,6 +21,9 @@ from tkinter import messagebox
 
 from PIL import Image, ImageTk
 
+global lista_viajes_general
+lista_viajes_general:ListaViaje = ListaViaje()
+
 global circular_doble
 circular_doble = CircularDoble()
 
@@ -30,13 +33,8 @@ arbolb_general: ArbolB = ArbolB(5)#Este es el valor de orden
 global lista_adyacencia_general
 lista_adyacencia_general:ListaAdyacencia = ListaAdyacencia()
 
-
 global id_viaje
 id_viaje:int = 1
-
-
-global lista_viajes_general
-lista_viajes_general:ListaViaje = ListaViaje()
 
 
 #--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
@@ -520,7 +518,7 @@ def obtener_fecha_hora_actual() -> str:
 
 def cargar_viaje():
     global id_viaje
-    global lista_viajes_general
+    #global lista_viajes_general
     # Crear ventana emergente
     ventana = tk.Toplevel()
     ventana.title("Ingreso de Viaje")
@@ -557,7 +555,7 @@ def cargar_viaje():
 
     def guardar_datos():
         global id_viaje
-        global lista_viajes_general
+        #global lista_viajes_general
         # Obtener los valores seleccionados
         origen_seleccionado = origen_var.get()
         destino_seleccionado = destino_var.get()
@@ -592,9 +590,9 @@ def cargar_viaje():
 def mostrar_informacion_viaje():
     id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
     if id:
-        print(f"Este es el id original: {id}")
-        viaje:Viaje = lista_viajes_general.buscar(id)
-        print(f"valor del viaje: {viaje}")
+        #print(f"Este es el id original: {int(id)}")
+        viaje:Viaje = lista_viajes_general.buscar(id=int(id))
+        #print(f"valor del viaje: {viaje}")
         if viaje:
             mostrar:str = f"ID: {str(viaje.id)}\nOrigen: {viaje.origen}\nDestino: {viaje.destino}\nFecha: {viaje.fecha}"
             mostrar += f"\nCliente: {viaje.cliente.get_nombres()} {viaje.cliente.get_apellidos()}\nVehiculo: {viaje.vehiculo.get_placa()}"
