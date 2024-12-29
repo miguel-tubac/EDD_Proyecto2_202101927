@@ -69,7 +69,7 @@ def create_menu(root):
     viajes_menu = Menu(menu_bar, tearoff=0)
     viajes_menu.add_command(label="Agregar", command=lambda: cargar_viaje())
     viajes_menu.add_command(label="Mostrar Información", command=lambda: mostrar_informacion_viaje())
-    viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Viajes -> Mostrar Estructura de Datos"))
+    viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_GraficaLista_viaje())
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
 
     # Menú de Rutas
@@ -592,9 +592,7 @@ def cargar_viaje():
 def mostrar_informacion_viaje():
     id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
     if id:
-        #print(f"Este es el id original: {int(id)}")
         viaje:Viaje = lista_viajes_general.buscar(id=int(id))
-        #print(f"valor del viaje: {viaje}")
         if viaje:
             mostrar:str = f"ID: {str(viaje.id)}\nOrigen: {viaje.origen}\nDestino: {viaje.destino}\nFecha: {viaje.fecha}"
             mostrar += f"\nCliente: {viaje.cliente.get_nombres()} {viaje.cliente.get_apellidos()}\nVehiculo: {viaje.vehiculo.get_placa()}"
@@ -604,6 +602,19 @@ def mostrar_informacion_viaje():
     else:
         messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
 
+
+
+def generar_GraficaLista_viaje():
+    id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
+    if id:
+        viaje:Viaje = lista_viajes_general.buscar(id=int(id))
+        if viaje:
+            mostrar:str = viaje.mostrar_rutas()
+            messagebox.showinfo("Información", mostrar)
+        else:
+            messagebox.showinfo("Error", f"El viaje con el ID: {id} no existe o la Lista esta vacia.")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
 
 
 

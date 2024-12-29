@@ -31,7 +31,7 @@ class ListaAdyacencia:
         nodos:Cola = Cola()
 
         # Aca se busca el vertice al que pertenece el origen y se realiza una copia del mismo
-        original:Vertice = copy(self.vertices.buscar(origen))
+        original:Vertice = copy(self.vertices.buscar_texto(origen))
         if original == None:
             print(f"No existe la ciudad origen: {origen}")
             return
@@ -61,7 +61,7 @@ class ListaAdyacencia:
             if not self.estaVicitado(nodos_visitados, aux.valor):
                 peso:int = aux.valor.peso
 
-                vecino:Vertice = copy(self.vertices.buscar(aux.valor.valor))
+                vecino:Vertice = copy(self.vertices.buscar_texto(aux.valor.valor))
                 vecino.peso = peso
                 vecino.set_peso_acumulado(origen.peso_acumulado + peso)
                 vecino.padre = origen
@@ -83,6 +83,16 @@ class ListaAdyacencia:
         return resultado != None
 
 
+
+    def obtener_lista_origenes(self) -> list:
+        lista_origenes = []
+        aux: Nodo[Vertice] = self.vertices.cabeza
+
+        while aux is not None:
+            lista_origenes.append(aux.valor.valor)  # Se obtiene el dato del vertice origen
+            aux = aux.sig
+
+        return lista_origenes
 
 
 

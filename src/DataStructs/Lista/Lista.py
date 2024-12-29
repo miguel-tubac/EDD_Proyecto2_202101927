@@ -49,6 +49,19 @@ class Lista:
         return None
     
 
+    def buscar_texto(self, valor):
+        aux: Nodo = self.cabeza
+        if aux == None:
+            return None
+
+        while aux != None:
+            if aux.valor.valor == valor:#comparamos si existe el valor y si si lo retornamos
+                return aux.valor
+            aux = aux.sig
+        
+        return None
+    
+
 
     def eliminar_alFrente(self)->Nodo:
         cabeza:Nodo = self.cabeza
