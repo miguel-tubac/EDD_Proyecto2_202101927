@@ -16,6 +16,7 @@ class Viaje:
         self.id:int = id
         self.camino:Lista = camino
 
+
     def mostrar_rutas(self) -> str:
         """
         Genera el código DOT para representar la lista enlazada simple
@@ -48,3 +49,15 @@ class Viaje:
 
         dot_code += "}\n"
         return dot_code
+
+
+
+    def EnViaje_Obtener_pesoAcumulado(self)->int:
+        aux: Nodo[Vertice] = self.camino.cabeza
+        valo_peso = 0
+
+        while aux is not None:
+            valo_peso = aux.valor.peso_acumulado
+            aux = aux.sig
+
+        return valo_peso

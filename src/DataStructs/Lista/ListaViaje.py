@@ -36,6 +36,34 @@ class ListaViaje:
         return None
     
 
+
+
+    def obtener_viajesMas_largos(self)->list:
+        aux: NodoViaje = self.inicio
+        if aux is None:
+            print("La lista está vacía")
+            return []
+
+        viajes: list[Viaje] = []
+
+        # Recorremos la lista y almacenamos los viajes
+        while aux is not None:
+            viaje: Viaje = aux.valor
+            # Verificar si el camino no está vacío
+            if viaje.camino.cabeza is not None:
+                viajes.append(viaje)
+            aux = aux.sig
+
+        # Ordenar los viajes por el peso acumulado de mayor a menor
+        viajes.sort(key=lambda v: v.EnViaje_Obtener_pesoAcumulado(), reverse=True)
+
+        # Retornar los 5 primeros o menos si no hay suficientes viajes
+        return viajes[:5]
+    
+
+
+    
+
     def generar_codigo_dot(self) -> str:
         aux: NodoViaje = self.inicio
         if aux is None:

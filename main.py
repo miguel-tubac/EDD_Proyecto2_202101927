@@ -74,7 +74,7 @@ def create_menu(root):
 
     # Menú de Reportes
     reportes_menu = Menu(menu_bar, tearoff=0)
-    reportes_menu.add_command(label="Top Viajes", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Viajes", command=lambda: generar_tabla_TopViajes())
     reportes_menu.add_command(label="Top Ganancia", command=lambda: cargar_viaje())
     reportes_menu.add_command(label="Top Clientes", command=lambda: cargar_viaje())
     reportes_menu.add_command(label="Top Vehículos", command=lambda: cargar_viaje())
@@ -644,7 +644,39 @@ def generar_Grafico_Generarl_Viajes():
 
 #--------------------------------------------------------------Esta es la parte de los Reportes------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
+def generar_tabla_TopViajes():
+    # Crear una nueva ventana
+    ventana_tabla = tk.Toplevel()
+    ventana_tabla.title("Tabla de Rutas")
+    ventana_tabla.geometry("400x200")
 
+    # Crear un Treeview para mostrar la tabla
+    columnas = ("origen", "destino", "distancia")
+    tabla = ttk.Treeview(ventana_tabla, columns=columnas, show="headings")
+
+    # Configurar las cabeceras de la tabla
+    tabla.heading("origen", text="Origen")
+    tabla.heading("destino", text="Destino")
+    tabla.heading("distancia", text="Distancia (s)")
+
+    # Ajustar el tamaño de las columnas
+    tabla.column("origen", width=100, anchor="center")
+    tabla.column("destino", width=100, anchor="center")
+    tabla.column("distancia", width=100, anchor="center")
+
+    # Agregar datos de ejemplo a la tabla
+    datos = []
+    datos_generales:list[Viaje] = lista_viajes_general.obtener_viajesMas_largos()
+
+    for viaje in datos_generales:
+        # Agregar una tupla a la lista de datos
+        datos.append((viaje.origen, viaje.destino, str(viaje.EnViaje_Obtener_pesoAcumulado())))
+        
+    for fila in datos:
+        tabla.insert("", tk.END, values=fila)
+
+    # Colocar la tabla en la ventana
+    tabla.pack(expand=True, fill="both")
 
 
 

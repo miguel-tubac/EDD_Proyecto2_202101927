@@ -7,7 +7,6 @@ class Vertice:
         self.vecinos:Lista[Vertice] = Lista() #Esta es al linkedist
         self.peso:int = peso
         self.peso_acumulado:int = 0
-        self.visitado:bool = False
         self.padre:Vertice = padre
 
     def get_peso_acumulado(self, peso)->int:
