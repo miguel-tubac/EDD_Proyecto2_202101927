@@ -12,6 +12,7 @@ from src.classes.Ruta import Ruta
 
 from src.classes.Viaje import Viaje
 from src.DataStructs.Lista.ListaViaje import ListaViaje
+from src.DataStructs.Lista.Lista import Lista
 
 import tkinter as tk
 from tkinter import Tk, Label, Menu, ttk
@@ -568,9 +569,10 @@ def cargar_viaje():
         fecha:str = obtener_fecha_hora_actual()
         objeto_cliente:Cliente = circular_doble.buscar_por_nombre(nombre_seleccionado)
         objeto_vehiculo:Vehiculo = arbolb_general.buscar(placa_seleccionada)
+        camino:Lista = lista_adyacencia_general.obtener_ruta(origen=origen_seleccionado, destino=destino_seleccionado)
 
         # Se agrega a la lista de los viajes
-        viaje:Viaje = Viaje(id=id_viaje, origen=origen_seleccionado, destino=destino_seleccionado, fecha=fecha, cliente=objeto_cliente, vehiculo=objeto_vehiculo)
+        viaje:Viaje = Viaje(id=id_viaje, origen=origen_seleccionado, destino=destino_seleccionado, fecha=fecha, cliente=objeto_cliente, vehiculo=objeto_vehiculo, camino=camino)
         lista_viajes_general.agregar(viaje)
         
         # Termina la ventana

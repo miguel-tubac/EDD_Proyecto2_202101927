@@ -37,10 +37,52 @@ class ListaAdyacencia:
             return
         
         nodos.encolar(original)
+        resultado:Vertice = self.get_ruta_corta(destino, nodos_visitados, nodos)
+
+        while resultado != None:
+            ruta.insertar_frente(resultado)
+            resultado = resultado.padre
+        
+        return ruta
+
+
 
     
     def get_ruta_corta(self, destino:str, nodos_visitados:Cola, nodos:Cola)->Vertice:
+        origen:Vertice = nodos.desencolar().valor
+
+        if origen.valor == destino:
+            nodos_visitados.encolar(origen)
+            return origen
         
+        aux:Nodo[Vertice] = origen.vecinos.cabeza
+        #Se agregan los vecinos a la cola de nodos
+        while aux != None:
+            if not self.estaVicitado(nodos_visitados, aux.valor):
+                peso:int = aux.valor.peso
+
+                vecino:Vertice = copy(self.vertices.buscar(aux.valor.valor))
+                vecino.peso = peso
+                vecino.set_peso_acumulado(origen.peso_acumulado + peso)
+                vecino.padre = origen
+
+                nodos.encolar(vecino)
+
+            aux = aux.sig
+        nodos.ordenar()
+        nodos_visitados.encolar(origen)
+        return self.get_ruta_corta(destino, nodos_visitados, nodos)
+
+
+
+
+
+
+    def estaVicitado(self, nodos_visitados:Cola, valor:Vertice)->bool:
+        resultado:Nodo = nodos_visitados.buscar_enCola(valor.valor)
+        return resultado != None
+
+
 
 
 

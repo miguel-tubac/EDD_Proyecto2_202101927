@@ -19,7 +19,8 @@ class Vertice:
         vecino:Vertice = Vertice(valor, peso)
         vecino.set_peso_acumulado(peso)
 
-        self.vecinos.insertar_final(vecino)
+        #self.vecinos.insertar_final(vecino)
+        self.vecinos.insertar_frente(vecino)
 
     
     def set_peso_acumulado(self, peso:int):
