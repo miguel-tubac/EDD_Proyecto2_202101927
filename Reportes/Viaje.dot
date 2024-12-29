@@ -1,0 +1,13 @@
+digraph ListaEnlazada {
+    rankdir=LR;
+    node [shape=record];
+    node0 [label="Lugar: Cadiz\nTiempo: 0"];
+    node1 [label="Lugar: Sevilla\nTiempo: 0 + 125 = 125"];
+    node2 [label="Lugar: Granada\nTiempo: 125 + 256 = 381"];
+    node3 [label="Lugar: Murcia\nTiempo: 381 + 278 = 659"];
+    node4 [label="Lugar: Valencia\nTiempo: 659 + 241 = 900"];
+    node0 -> node1;
+    node1 -> node2;
+    node2 -> node3;
+    node3 -> node4;
+}

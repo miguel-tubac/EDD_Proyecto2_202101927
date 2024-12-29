@@ -72,6 +72,15 @@ def create_menu(root):
     viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_GraficaLista_viaje())
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
 
+    # Menú de Reportes
+    reportes_menu = Menu(menu_bar, tearoff=0)
+    reportes_menu.add_command(label="Top Viajes", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Ganancia", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Clientes", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Vehículos", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Ruta de un viaje", command=lambda: generar_GraficaLista_viaje())
+    menu_bar.add_cascade(label="Reportes", menu=reportes_menu)
+
     # Menú de Rutas
     rutas_menu = Menu(menu_bar, tearoff=0)
     rutas_menu.add_command(label="Carga Masiva", command=lambda: cargar_archivo_rutas(root=root))
@@ -604,17 +613,8 @@ def mostrar_informacion_viaje():
 
 
 
-def generar_GraficaLista_viaje():
-    id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
-    if id:
-        viaje:Viaje = lista_viajes_general.buscar(id=int(id))
-        if viaje:
-            mostrar:str = viaje.mostrar_rutas()
-            messagebox.showinfo("Información", mostrar)
-        else:
-            messagebox.showinfo("Error", f"El viaje con el ID: {id} no existe o la Lista esta vacia.")
-    else:
-        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
 
 
 
@@ -623,6 +623,53 @@ def generar_GraficaLista_viaje():
 
 
 
+
+
+
+
+#--------------------------------------------------------------Esta es la parte de los Reportes------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+def generar_GraficaLista_viaje():
+    id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
+    if id:
+        viaje:Viaje = lista_viajes_general.buscar(id=int(id))
+        if viaje:
+            mostrar:str = viaje.mostrar_rutas()
+            grafica_viaje(mostrar)
+            #messagebox.showinfo("Información", mostrar)
+        else:
+            messagebox.showinfo("Error", f"El viaje con el ID: {id} no existe o la Lista esta vacia.")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
+
+
+
+def grafica_viaje(dot2:str):
+    try:
+        # Generar el texto en formato DOT
+        dot:str = dot2
+
+        # Guardar el texto en un archivo .dot
+        with open("Reportes/Viaje.dot", "w") as file:
+            file.write(dot)
+
+        # Generar la imagen usando Graphviz
+        resultado = os.system("dot -Tpng -Gdpi=300 Reportes/Viaje.dot -o Reportes/Viaje.png")
+
+        # Verificar si el comando se ejecutó correctamente
+        if resultado != 0:
+            raise RuntimeError("Error al generar la imagen con Graphviz")
+        else:
+            os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Viaje.png")
+    except Exception as e:
+        print(f"Error al generar el gráfico de la lista de adyacencia: {e}")
+
+#---------------------------------------------------------------------------Fin de los Reportes------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
