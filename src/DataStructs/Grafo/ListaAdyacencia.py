@@ -90,6 +90,18 @@ class ListaAdyacencia:
 
 
 
+    def obtener_lista_origenes(self) -> list:
+        lista_origenes = []
+        aux: Nodo[Vertice] = self.vertices.cabeza
+
+        while aux is not None:
+            lista_origenes.append(aux.valor.valor)  # Se obtiene el dato del vertice origen
+            aux = aux.sig
+
+        return lista_origenes
+
+
+
 
     def imprimir(self)->str:
         dot = 'digraph G {\n\tedge [arrowhead=none fontcolor=black color="#ff5400"];\n\t'

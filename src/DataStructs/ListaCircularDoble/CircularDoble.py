@@ -85,6 +85,25 @@ class CircularDoble:
             if actual == self.primero:
                 break
 
+    
+    def mostrar_nombres(self):
+        if self.esta_vacia():
+            print("La lista está vacía.")
+            return
+
+        nombres = []
+        actual = self.primero
+        while True:
+            cliente = actual.Cliente
+            nombres.append(f"{cliente.nombres} {cliente.apellidos}")
+            #print(f"DPI: {cliente.dpi}, Nombres: {cliente.nombres}, Apellidos: {cliente.apellidos}, Género: {cliente.genero}, Teléfono: {cliente.telefono}, Dirección: {cliente.direccion}")
+            actual = actual.siguiente
+            if actual == self.primero:
+                break
+
+        return nombres
+
+
 
     def buscar(self, dpi:str) -> Cliente:
         if self.esta_vacia():

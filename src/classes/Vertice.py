@@ -13,6 +13,7 @@ class Vertice:
         self.peso_acumulado += peso
         return self.peso_acumulado
 
+
     def __str__(self) -> str:
         aux = self.vecinos.cabeza
 

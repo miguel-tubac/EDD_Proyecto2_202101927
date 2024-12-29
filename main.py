@@ -11,7 +11,7 @@ from src.classes.Vertice import Vertice
 from src.classes.Ruta import Ruta
 
 import tkinter as tk
-from tkinter import Tk, Label, Menu
+from tkinter import Tk, Label, Menu, ttk
 from tkinter import filedialog
 from tkinter import simpledialog
 from tkinter import messagebox
@@ -26,6 +26,10 @@ arbolb_general: ArbolB = ArbolB(5)#Este es el valor de orden
 
 global lista_adyacencia_general
 lista_adyacencia_general:ListaAdyacencia = ListaAdyacencia()
+
+
+global id_viaje
+id_viaje:int = 1
 
 
 #--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
@@ -57,7 +61,7 @@ def create_menu(root):
 
     # Menú de Viajes
     viajes_menu = Menu(menu_bar, tearoff=0)
-    viajes_menu.add_command(label="Agregar", command=lambda: on_option_selected("Viajes -> Agregar"))
+    viajes_menu.add_command(label="Agregar", command=lambda: cargar_viaje())
     viajes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Viajes -> Mostrar Información"))
     viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Viajes -> Mostrar Estructura de Datos"))
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
@@ -503,37 +507,58 @@ def generar_Grafico_ListaAdyacencia(root):
 #--------------------------------------------------------------Esta es la parte de los viajes---------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 def cargar_viaje():
+    global id_viaje
     # Crear ventana emergente
     ventana = tk.Toplevel()
-    ventana.title("Ingreso de Vehículo")
-    ventana.geometry("300x200") #largo x ancho
+    ventana.title("Ingreso de Viaje")
+    ventana.geometry("300x200")  # largo x ancho
 
     # Variables para almacenar los datos
+    id_var = tk.StringVar()
+    id_var.set(str(id_viaje))
+
+    origen_var = tk.StringVar()
+    destino_var = tk.StringVar()
+    nombre_var = tk.StringVar()
     placa_var = tk.StringVar()
-    marca_var = tk.StringVar()
-    modelo_var = tk.StringVar()
-    precio_var = tk.StringVar()
+
+    origenes = lista_adyacencia_general.obtener_lista_origenes()
+    nombres = circular_doble.mostrar_nombres()
+    placas = arbolb_general.recorrer_arbol()
 
     # Etiquetas y entradas para cada campo
-    tk.Label(ventana, text="Placa:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
-    tk.Entry(ventana, textvariable=placa_var).grid(row=0, column=1, padx=10, pady=5)
+    tk.Label(ventana, text="ID:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+    tk.Entry(ventana, textvariable=id_var, state="readonly").grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(ventana, text="Marca:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
-    tk.Entry(ventana, textvariable=marca_var).grid(row=1, column=1, padx=10, pady=5)
+    tk.Label(ventana, text="Origen:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+    ttk.Combobox(ventana, values=origenes, state="readonly", textvariable=origen_var).grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(ventana, text="Modelo:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
-    tk.Entry(ventana, textvariable=modelo_var).grid(row=2, column=1, padx=10, pady=5)
+    tk.Label(ventana, text="Destino:").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+    ttk.Combobox(ventana, values=origenes, state="readonly", textvariable=destino_var).grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Label(ventana, text="Precio (Q):").grid(row=3, column=0, padx=10, pady=5, sticky="w")
-    tk.Entry(ventana, textvariable=precio_var).grid(row=3, column=1, padx=10, pady=5)
+    tk.Label(ventana, text="Nombre:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+    ttk.Combobox(ventana, values=nombres, state="readonly", textvariable=nombre_var).grid(row=3, column=1, padx=10, pady=5)
 
+    tk.Label(ventana, text="Placa:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+    ttk.Combobox(ventana, values=placas, state="readonly", textvariable=placa_var).grid(row=4, column=1, padx=10, pady=5)
 
-    def guardar_datos(): 
-        vehiculo = Vehiculo(placa=placa_var.get(), marca=marca_var.get(),modelo=int(modelo_var.get()),precio=float(precio_var.get()))
-        arbolb_general.insertar_valor(vehiculo)
-        print("¡¡¡ Vehículo ingresado Correctamente !!!") 
+    def guardar_datos():
+        global id_viaje
+        # Obtener los valores seleccionados
+        origen_seleccionado = origen_var.get()
+        destino_seleccionado = destino_var.get()
+        nombre_seleccionado = nombre_var.get()
+        placa_seleccionada = placa_var.get()
+
+        print("Origen:", origen_seleccionado)
+        print("Destino:", destino_seleccionado)
+        print("Nombre:", nombre_seleccionado)
+        print("Placa:", placa_seleccionada)
+
+        # Puedes usar estos valores para lo que necesites
         ventana.destroy()
-        messagebox.showinfo("Información", "¡¡¡ Vehículo ingresado Correctamente !!!")
+        id_viaje += 1
+        messagebox.showinfo("Información", "¡¡¡ Datos guardados correctamente !!!")
 
     # Botón para guardar datos
     tk.Button(ventana, text="Guardar", command=guardar_datos).grid(row=6, column=0, columnspan=2, pady=10)
@@ -542,6 +567,7 @@ def cargar_viaje():
     ventana.transient()  # Hacer que sea hija de la ventana principal
     ventana.grab_set()  # Bloquear interacción con la ventana principal hasta que esta se cierre
     ventana.mainloop()
+
 
 
 

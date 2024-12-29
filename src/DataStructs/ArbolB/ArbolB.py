@@ -88,6 +88,31 @@ class ArbolB:
 
         # Si no es hoja, buscar en el hijo correspondiente
         return self._buscar_en_nodo(nodo.hijos[i], placa)
+    
+
+
+    def recorrer_arbol(self):
+        placas = []
+        self._recorrer_nodo(self.raiz, placas)
+        return placas
+
+    def _recorrer_nodo(self, nodo: NodoArbolB, placas):
+        i = 0
+        # Recorrer los hijos y claves del nodo en orden
+        while i < len(nodo.claves):
+            # Si el nodo no es hoja, primero recorrer el hijo izquierdo
+            if not nodo.hoja:
+                self._recorrer_nodo(nodo.hijos[i], placas)
+            # Procesar la clave actual y agregar la placa a la lista
+            placas.append(nodo.claves[i].get_placa())
+            i += 1
+
+        # Recorrer el último hijo si el nodo no es hoja
+        if not nodo.hoja:
+            self._recorrer_nodo(nodo.hijos[i], placas)
+
+
+
 
 
 
