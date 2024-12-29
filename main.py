@@ -69,7 +69,7 @@ def create_menu(root):
     viajes_menu = Menu(menu_bar, tearoff=0)
     viajes_menu.add_command(label="Agregar", command=lambda: cargar_viaje())
     viajes_menu.add_command(label="Mostrar Información", command=lambda: mostrar_informacion_viaje())
-    viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_GraficaLista_viaje())
+    viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: generar_Grafico_Generarl_Viajes())
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
 
     # Menú de Reportes
@@ -613,10 +613,25 @@ def mostrar_informacion_viaje():
 
 
 
+def generar_Grafico_Generarl_Viajes():
+    try:
+        # Generar el texto en formato DOT
+        dot: str = lista_viajes_general.generar_codigo_dot()
 
+        # Guardar el texto en un archivo .dot
+        with open("Reportes/Viajes_General.dot", "w") as file:
+            file.write(dot)
 
+        # Generar la imagen usando Graphviz
+        resultado = os.system("dot -Tpng -Gdpi=300 Reportes/Viajes_General.dot -o Reportes/Viajes_General.png")
 
-
+        # Verificar si el comando se ejecutó correctamente
+        if resultado != 0:
+            raise RuntimeError("Error al generar la imagen con Graphviz")
+        else:
+            os.startfile("C:/Users/tubac/Downloads/Vacaciones Diciembre 2024/EDD Vacaciones Diciembre 2024/Laboratorio/Proyecto_2/Reportes/Viajes_General.png")
+    except Exception as e:
+        print(f"Error al generar el gráfico de la lista de adyacencia: {e}")
 
 #---------------------------------------------------------------------------Fin de los Viajes---------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -629,6 +644,8 @@ def mostrar_informacion_viaje():
 
 #--------------------------------------------------------------Esta es la parte de los Reportes------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 

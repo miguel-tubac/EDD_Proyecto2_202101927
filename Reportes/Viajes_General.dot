@@ -1,0 +1,9 @@
+digraph ListaEnlazada {
+    rankdir=LR;
+    node [shape=record];
+    node0 [label="ID: 1\nCliente:  Elian  Estrada\nVehiculo: 111UKK"];
+    node1 [label="ID: 2\nCliente:  Angela  Pelaez\nVehiculo: 266IXH"];
+    node2 [label="ID: 3\nCliente:  Luli  Lopez\nVehiculo: 303LNT"];
+    node0 -> node1;
+    node1 -> node2;
+}

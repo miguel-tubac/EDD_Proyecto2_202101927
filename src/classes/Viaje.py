@@ -16,26 +16,6 @@ class Viaje:
         self.id:int = id
         self.camino:Lista = camino
 
-    # def get_ruta(self, grafo:ListaAdyacencia):
-        # self.camino = grafo.obtener_ruta(self.origen, self.destino)
-
-    '''
-    def mostrar_rutas(self)->str:
-        ruta:str = ""
-        aux:Nodo[Vertice] = self.camino.cabeza
-
-        while aux != None:
-            if aux.valor.peso_acumulado == 0:
-                ruta += f"{aux.valor.valor}({aux.valor.peso_acumulado}) -> "
-            else:
-                ruta += f"{aux.valor.valor}({peso} + {aux.valor.peso} = {aux.valor.peso_acumulado}) -> "
-
-            peso:int = aux.valor.peso_acumulado
-            aux = aux.sig
-
-        return ruta'''
-    
-
     def mostrar_rutas(self) -> str:
         """
         Genera el código DOT para representar la lista enlazada simple
