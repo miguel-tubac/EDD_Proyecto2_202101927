@@ -1,5 +1,5 @@
 import os
-from src.classes.Persona import Persona
+from datetime import datetime
 from src.DataStructs.ArbolB.ArbolB import ArbolB
 
 from src.classes.Cliente import Cliente
@@ -9,6 +9,9 @@ from src.DataStructs.ListaCircularDoble.CircularDoble import CircularDoble
 from src.DataStructs.Grafo.ListaAdyacencia import ListaAdyacencia
 from src.classes.Vertice import Vertice
 from src.classes.Ruta import Ruta
+
+from src.classes.Viaje import Viaje
+from src.DataStructs.Lista.ListaViaje import ListaViaje
 
 import tkinter as tk
 from tkinter import Tk, Label, Menu, ttk
@@ -30,6 +33,10 @@ lista_adyacencia_general:ListaAdyacencia = ListaAdyacencia()
 
 global id_viaje
 id_viaje:int = 1
+
+
+global lista_viajes_general
+lista_viajes_general:ListaViaje = ListaViaje()
 
 
 #--------------------------------------------------------------Esta es el menu principal----------------------------------------------------------------
@@ -62,7 +69,7 @@ def create_menu(root):
     # Menú de Viajes
     viajes_menu = Menu(menu_bar, tearoff=0)
     viajes_menu.add_command(label="Agregar", command=lambda: cargar_viaje())
-    viajes_menu.add_command(label="Mostrar Información", command=lambda: on_option_selected("Viajes -> Mostrar Información"))
+    viajes_menu.add_command(label="Mostrar Información", command=lambda: mostrar_informacion_viaje())
     viajes_menu.add_command(label="Mostrar Estructura de Datos", command=lambda: on_option_selected("Viajes -> Mostrar Estructura de Datos"))
     menu_bar.add_cascade(label="Viajes", menu=viajes_menu)
 
@@ -506,8 +513,14 @@ def generar_Grafico_ListaAdyacencia(root):
 
 #--------------------------------------------------------------Esta es la parte de los viajes---------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
+def obtener_fecha_hora_actual() -> str:
+    fecha_hora_actual = datetime.now()
+    return fecha_hora_actual.strftime("%Y-%m-%d %H:%M:%S")
+
+
 def cargar_viaje():
     global id_viaje
+    global lista_viajes_general
     # Crear ventana emergente
     ventana = tk.Toplevel()
     ventana.title("Ingreso de Viaje")
@@ -544,18 +557,25 @@ def cargar_viaje():
 
     def guardar_datos():
         global id_viaje
+        global lista_viajes_general
         # Obtener los valores seleccionados
         origen_seleccionado = origen_var.get()
         destino_seleccionado = destino_var.get()
         nombre_seleccionado = nombre_var.get()
         placa_seleccionada = placa_var.get()
 
-        print("Origen:", origen_seleccionado)
-        print("Destino:", destino_seleccionado)
-        print("Nombre:", nombre_seleccionado)
-        print("Placa:", placa_seleccionada)
+        # Queda pendiente agregar la parte para la lista con la ruta mas corta
 
-        # Puedes usar estos valores para lo que necesites
+        # Se obtinen los objetos
+        fecha:str = obtener_fecha_hora_actual()
+        objeto_cliente:Cliente = circular_doble.buscar_por_nombre(nombre_seleccionado)
+        objeto_vehiculo:Vehiculo = arbolb_general.buscar(placa_seleccionada)
+
+        # Se agrega a la lista de los viajes
+        viaje:Viaje = Viaje(id=id_viaje, origen=origen_seleccionado, destino=destino_seleccionado, fecha=fecha, cliente=objeto_cliente, vehiculo=objeto_vehiculo)
+        lista_viajes_general.agregar(viaje)
+        
+        # Termina la ventana
         ventana.destroy()
         id_viaje += 1
         messagebox.showinfo("Información", "¡¡¡ Datos guardados correctamente !!!")
@@ -569,14 +589,20 @@ def cargar_viaje():
     ventana.mainloop()
 
 
-
-
-
-
-# def calculo_ruta_corta():
-#   lista_adyacencia_general.obtener_rutaCorta("Cadiz", "Madrid")
-
-
+def mostrar_informacion_viaje():
+    id = simpledialog.askstring("Ingreso del ID", "Ingrese el ID del Viaje:")
+    if id:
+        print(f"Este es el id original: {id}")
+        viaje:Viaje = lista_viajes_general.buscar(id)
+        print(f"valor del viaje: {viaje}")
+        if viaje:
+            mostrar:str = f"ID: {str(viaje.id)}\nOrigen: {viaje.origen}\nDestino: {viaje.destino}\nFecha: {viaje.fecha}"
+            mostrar += f"\nCliente: {viaje.cliente.get_nombres()} {viaje.cliente.get_apellidos()}\nVehiculo: {viaje.vehiculo.get_placa()}"
+            messagebox.showinfo("Información", mostrar)
+        else:
+            messagebox.showinfo("Error", f"El viaje con el ID: {id} no existe o la Lista esta vacia.")
+    else:
+        messagebox.showinfo("Información", "No se ingresó ningún valor válido.")
 
 
 

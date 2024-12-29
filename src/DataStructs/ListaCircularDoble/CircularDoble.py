@@ -96,6 +96,7 @@ class CircularDoble:
         while True:
             cliente = actual.Cliente
             nombres.append(f"{cliente.nombres} {cliente.apellidos}")
+            #nombres.append(cliente)
             #print(f"DPI: {cliente.dpi}, Nombres: {cliente.nombres}, Apellidos: {cliente.apellidos}, Género: {cliente.genero}, Teléfono: {cliente.telefono}, Dirección: {cliente.direccion}")
             actual = actual.siguiente
             if actual == self.primero:
@@ -121,6 +122,29 @@ class CircularDoble:
         
         print(f"El cliente con el numero de DPI: {dpi} no se encontro en el sistema.")
         return None
+    
+
+
+    def buscar_por_nombre(self, nombre:str) -> Cliente:
+        if self.esta_vacia():
+            print("La lista está vacía.")
+            return None
+
+        actual = self.primero
+        while True:
+            cliente = actual.Cliente
+            nombres = cliente.nombres +" "+ cliente.apellidos
+            if nombres == nombre:
+                return cliente
+            actual = actual.siguiente
+            if actual == self.primero:
+                break
+        
+        print(f"El cliente con el nombre: {nombre} no se encontro en el sistema.")
+        return None
+
+
+
 
 
     def generar_imagen(self) -> str:
