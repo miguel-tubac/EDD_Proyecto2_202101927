@@ -2,14 +2,4 @@ digraph ListaEnlazada {
     rankdir=LR;
     node [shape=record];
     node0 [label="ID: 1\nCliente:  Elian  Estrada\nVehiculo: 100KAR"];
-    node1 [label="ID: 2\nCliente:  Leila  Gomez\nVehiculo: 109XGC"];
-    node2 [label="ID: 3\nCliente:  Elian  Estrada\nVehiculo: 109XGC"];
-    node3 [label="ID: 4\nCliente:  Emy  Ruiz\nVehiculo: 100KAR"];
-    node4 [label="ID: 5\nCliente:  Elian  Estrada\nVehiculo: 111UKK"];
-    node5 [label="ID: 6\nCliente:  Elian  Estrada\nVehiculo: 111UKK"];
-    node0 -> node1;
-    node1 -> node2;
-    node2 -> node3;
-    node3 -> node4;
-    node4 -> node5;
 }

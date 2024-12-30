@@ -6,8 +6,12 @@ digraph ListaEnlazada {
     node2 [label="Lugar: Granada\nTiempo: 125 + 256 = 381"];
     node3 [label="Lugar: Murcia\nTiempo: 381 + 278 = 659"];
     node4 [label="Lugar: Valencia\nTiempo: 659 + 241 = 900"];
+    node5 [label="Lugar: Barcelona\nTiempo: 900 + 349 = 1249"];
+    node6 [label="Lugar: Gerona\nTiempo: 1249 + 100 = 1349"];
     node0 -> node1;
     node1 -> node2;
     node2 -> node3;
     node3 -> node4;
+    node4 -> node5;
+    node5 -> node6;
 }
