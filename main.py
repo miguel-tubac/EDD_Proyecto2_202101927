@@ -75,7 +75,7 @@ def create_menu(root):
     # Menú de Reportes
     reportes_menu = Menu(menu_bar, tearoff=0)
     reportes_menu.add_command(label="Top Viajes", command=lambda: generar_tabla_TopViajes())
-    reportes_menu.add_command(label="Top Ganancia", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Ganancia", command=lambda: generar_tabla_TopGanancias())
     reportes_menu.add_command(label="Top Clientes", command=lambda: cargar_viaje())
     reportes_menu.add_command(label="Top Vehículos", command=lambda: cargar_viaje())
     reportes_menu.add_command(label="Ruta de un viaje", command=lambda: generar_GraficaLista_viaje())
@@ -647,7 +647,7 @@ def generar_Grafico_Generarl_Viajes():
 def generar_tabla_TopViajes():
     # Crear una nueva ventana
     ventana_tabla = tk.Toplevel()
-    ventana_tabla.title("Tabla de Rutas")
+    ventana_tabla.title("Top Viajes")
     ventana_tabla.geometry("400x200")
 
     # Crear un Treeview para mostrar la tabla
@@ -678,6 +678,42 @@ def generar_tabla_TopViajes():
     # Colocar la tabla en la ventana
     tabla.pack(expand=True, fill="both")
 
+
+
+
+def generar_tabla_TopGanancias():
+    # Crear una nueva ventana
+    ventana_tabla = tk.Toplevel()
+    ventana_tabla.title("Top Ganancia")
+    ventana_tabla.geometry("400x200")
+
+    # Crear un Treeview para mostrar la tabla
+    columnas = ("origen", "destino", "distancia")
+    tabla = ttk.Treeview(ventana_tabla, columns=columnas, show="headings")
+
+    # Configurar las cabeceras de la tabla
+    tabla.heading("origen", text="Origen")
+    tabla.heading("destino", text="Destino")
+    tabla.heading("distancia", text="Precio (Q.)")
+
+    # Ajustar el tamaño de las columnas
+    tabla.column("origen", width=100, anchor="center")
+    tabla.column("destino", width=100, anchor="center")
+    tabla.column("distancia", width=100, anchor="center")
+
+    # Agregar datos de ejemplo a la tabla
+    datos = []
+    datos_generales:list[Viaje] = lista_viajes_general.obtener_viajesMas_caros()
+
+    for viaje in datos_generales:
+        # Agregar una tupla a la lista de datos
+        datos.append((viaje.origen, viaje.destino, str(viaje.objener_precio_viaje())))
+        
+    for fila in datos:
+        tabla.insert("", tk.END, values=fila)
+
+    # Colocar la tabla en la ventana
+    tabla.pack(expand=True, fill="both")
 
 
 

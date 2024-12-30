@@ -61,3 +61,9 @@ class Viaje:
             aux = aux.sig
 
         return valo_peso
+    
+
+    def objener_precio_viaje(self)->float:
+        tiempo:float = float(self.EnViaje_Obtener_pesoAcumulado())
+        precio:float =  tiempo* self.vehiculo.get_precio()
+        return precio
