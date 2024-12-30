@@ -76,8 +76,8 @@ def create_menu(root):
     reportes_menu = Menu(menu_bar, tearoff=0)
     reportes_menu.add_command(label="Top Viajes", command=lambda: generar_tabla_TopViajes())
     reportes_menu.add_command(label="Top Ganancia", command=lambda: generar_tabla_TopGanancias())
-    reportes_menu.add_command(label="Top Clientes", command=lambda: cargar_viaje())
-    reportes_menu.add_command(label="Top Vehículos", command=lambda: cargar_viaje())
+    reportes_menu.add_command(label="Top Clientes", command=lambda: generar_tabla_Top_Clientes())
+    reportes_menu.add_command(label="Top Vehículos", command=lambda: generar_tabla_Top_Vehículos())
     reportes_menu.add_command(label="Ruta de un viaje", command=lambda: generar_GraficaLista_viaje())
     menu_bar.add_cascade(label="Reportes", menu=reportes_menu)
 
@@ -580,6 +580,10 @@ def cargar_viaje():
         objeto_vehiculo:Vehiculo = arbolb_general.buscar(placa_seleccionada)
         camino:Lista = lista_adyacencia_general.obtener_ruta(origen=origen_seleccionado, destino=destino_seleccionado)
 
+        # Aca se incrementa el contador de viajes de los dos objetos
+        objeto_cliente.incrementar_viaje()
+        objeto_vehiculo.incrementar_cantidad_viajes()
+
         # Se agrega a la lista de los viajes
         viaje:Viaje = Viaje(id=id_viaje, origen=origen_seleccionado, destino=destino_seleccionado, fecha=fecha, cliente=objeto_cliente, vehiculo=objeto_vehiculo, camino=camino)
         lista_viajes_general.agregar(viaje)
@@ -708,6 +712,80 @@ def generar_tabla_TopGanancias():
     for viaje in datos_generales:
         # Agregar una tupla a la lista de datos
         datos.append((viaje.origen, viaje.destino, str(viaje.objener_precio_viaje())))
+        
+    for fila in datos:
+        tabla.insert("", tk.END, values=fila)
+
+    # Colocar la tabla en la ventana
+    tabla.pack(expand=True, fill="both")
+
+
+
+
+def generar_tabla_Top_Clientes():
+    # Crear una nueva ventana
+    ventana_tabla = tk.Toplevel()
+    ventana_tabla.title("Top Clientes")
+    ventana_tabla.geometry("400x200")
+
+    # Crear un Treeview para mostrar la tabla
+    columnas = ("origen", "destino", "distancia")
+    tabla = ttk.Treeview(ventana_tabla, columns=columnas, show="headings")
+
+    # Configurar las cabeceras de la tabla
+    tabla.heading("origen", text="Nombres")
+    tabla.heading("destino", text="Apellidos")
+    tabla.heading("distancia", text="Cantidad Viajes")
+
+    # Ajustar el tamaño de las columnas
+    tabla.column("origen", width=100, anchor="center")
+    tabla.column("destino", width=100, anchor="center")
+    tabla.column("distancia", width=100, anchor="center")
+
+    # Agregar datos de ejemplo a la tabla
+    datos = []
+    datos_generales:list[Viaje] = lista_viajes_general.obtener_clientes_Mas_Viajes()
+
+    for viaje in datos_generales:
+        # Agregar una tupla a la lista de datos
+        datos.append((viaje.cliente.get_nombres(), viaje.cliente.get_apellidos(), str(viaje.cliente.get_cantidad_viajes())))
+        
+    for fila in datos:
+        tabla.insert("", tk.END, values=fila)
+
+    # Colocar la tabla en la ventana
+    tabla.pack(expand=True, fill="both")
+
+
+
+
+def generar_tabla_Top_Vehículos():
+    # Crear una nueva ventana
+    ventana_tabla = tk.Toplevel()
+    ventana_tabla.title("Top Vehículos")
+    ventana_tabla.geometry("400x200")
+
+    # Crear un Treeview para mostrar la tabla
+    columnas = ("origen", "destino", "distancia")
+    tabla = ttk.Treeview(ventana_tabla, columns=columnas, show="headings")
+
+    # Configurar las cabeceras de la tabla
+    tabla.heading("origen", text="Placa")
+    tabla.heading("destino", text="Marca")
+    tabla.heading("distancia", text="Cantidad Viajes")
+
+    # Ajustar el tamaño de las columnas
+    tabla.column("origen", width=100, anchor="center")
+    tabla.column("destino", width=100, anchor="center")
+    tabla.column("distancia", width=100, anchor="center")
+
+    # Agregar datos de ejemplo a la tabla
+    datos = []
+    datos_generales:list[Viaje] = lista_viajes_general.obtener_clientes_Mas_Viajes()
+
+    for viaje in datos_generales:
+        # Agregar una tupla a la lista de datos
+        datos.append((viaje.vehiculo.get_placa(), viaje.vehiculo.get_marca(), str(viaje.vehiculo.get_cantidad_viajes())))
         
     for fila in datos:
         tabla.insert("", tk.END, values=fila)

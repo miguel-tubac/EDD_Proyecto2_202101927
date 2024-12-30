@@ -7,6 +7,11 @@ class Cliente:
         self.genero = genero
         self.telefono = telefono
         self.direccion = direccion
+        self.cantidad_viajes = 0
+
+    
+    def incrementar_viaje(self):
+        self.cantidad_viajes += 1
 
 
     # Getters
@@ -27,6 +32,9 @@ class Cliente:
 
     def get_direccion(self):
         return self.direccion
+    
+    def get_cantidad_viajes(self)->int:
+        return self.cantidad_viajes
 
     # Setters
     def set_dpi(self, dpi: str):
